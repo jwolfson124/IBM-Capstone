@@ -28,28 +28,20 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
                                   {'label': 'VAFB SLC-4E', 'value': 'VAFB SLC-4E'},],
                                   value='ALL',
                                   placeholder='Select a Launch Site Here',
-                                  searchable=True),
-
-                                # TASK 2: Add a pie chart to show the total successful launches count for all sites
-                                # If a specific launch site was selected, show the Success vs. Failed counts for the site
-                                html.Div(dcc.Graph(id='success-pie-chart')),
-                                html.Br(),
-
-                                html.P("Payload range (Kg):"),
-                                # TASK 3: Add a slider to select payload range
-                                #dcc.RangeSlider(id='payload-slider',...)
-
-                                # TASK 4: Add a scatter chart to show the correlation between payload and launch success
-                                html.Div(dcc.Graph(id='success-payload-scatter-chart')),
-                                ])
-
-# TASK 2:
-# Add a callback function for `site-dropdown` as input, `success-pie-chart` as output
-
-# TASK 4:
-# Add a callback function for `site-dropdown` and `payload-slider` as inputs, `success-payload-scatter-chart` as output
-
-
-# Run the app
-if __name__ == '__main__':
-    app.run_server()
+                                  searchable=True)
+                    @app.callback(
+                        Output(component_id='success-pie-chart', component_property='figure'),
+                        input(component_id='site-dropdown', component_property='value'))
+                        
+                    def get_pie_chart(entered_site):
+                        if entered_site == 'All':
+                            fig = px.pie(spacex_df, values='class',
+                            names = spacex_df["Launch Site"],
+                            title='Total Launches')
+                            return fig
+                        else:
+                            filtered_df = spacex_df[spacex_df["Launch Site"]==entered_site]
+                            fig = px.pie(filtered_df, values='class',
+                            names = filtered_df['class'],
+                            title='Success of Launches')
+                            return fig
