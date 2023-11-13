@@ -1,4 +1,3 @@
-# Import required libraries
 import pandas as pd
 import dash
 import dash_html_components as html
@@ -29,17 +28,17 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
                                   value='ALL',
                                   placeholder='Select a Launch Site Here',
                                   searchable=True)])
-                    @app.callback(
-                        Output(component_id='success-pie-chart', component_property='figure'),
-                        input(component_id='site-dropdown', component_property='value'))
-                        
-                     def get_pie_chart(entered_site):
-                        if entered_site == 'All':
-                            fig = px.pie(spacex_df, values='class',
-                            names = "Launch Site",
-                            title='Total Launches')
-                            return fig
-                        else:
-                            filtered_df = spacex_df[spacex_df["Launch Site"]==entered_site]
-                            fig = px.pie(filtered_df, values='Flight Number', names = 'class', title='Success of Launches')
-                            return fig
+@app.callback(
+    Output(component_id='success-pie-chart', component_property='figure'),
+    input(component_id='site-dropdown', component_property='value'))
+
+def get_pie_chart(entered_site):
+    if entered_site == 'All':
+        fig = px.pie(spacex_df, values='class',
+        names = "Launch Site",
+        title='Total Launches')
+        return fig
+    else:
+        filtered_df = spacex_df[spacex_df["Launch Site"]==entered_site]
+        fig = px.pie(filtered_df, values='Flight Number', names = 'class', title='Success of Launches')
+        return fig 
