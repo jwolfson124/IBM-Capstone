@@ -28,7 +28,7 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
                                   {'label': 'VAFB SLC-4E', 'value': 'VAFB SLC-4E'},],
                                   value='ALL',
                                   placeholder='Select a Launch Site Here',
-                                  searchable=True)
+                                  searchable=True)])
                     @app.callback(
                         Output(component_id='success-pie-chart', component_property='figure'),
                         input(component_id='site-dropdown', component_property='value'))
