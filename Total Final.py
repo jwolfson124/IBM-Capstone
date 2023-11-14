@@ -21,7 +21,7 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
                                 # TASK 1: Add a dropdown list to enable Launch Site selection
                                 # The default select value is for ALL sites
                                 dcc.Dropdown(id='site-dropdown',
-                                  options=[{'label': 'All Sites', 'value': 'ALL'}
+                                  options=[{'label': 'All Sites', 'value': 'All sites'}
                                   ,{'label': 'CCAFS LC-40', 'value': 'CCAFS LC-40'},
                                   {'label': 'CCAFS SLC-40', 'value': 'CCAFS SLC-40'},
                                   {'label': 'KSC LC-39A', 'value': 'KSC LC-39A'},
@@ -50,27 +50,27 @@ app.layout = html.Div(children=[html.H1('SpaceX Launch Records Dashboard',
 # Add a callback function for `site-dropdown` as input, `success-pie-chart` as output
 @app.callback(
     Output(component_id='success-pie-chart', component_property='figure'),
-    input(component_id='site-dropdown', component_property='value'))
+    Input(component_id='site-dropdown', component_property='value'))
 
 def get_pie_chart(entered_site):
-    if entered_site == 'All':
-        fig = dcc.Graph(px.pie(spacex_df, values='class',
+    if entered_site == 'All sites':
+        fig = px.pie(spacex_df, values='class',
         names = "Launch Site",
-        title='Total Launches'))
+        title='Total Launches')
     else:
         filtered_df = spacex_df[spacex_df["Launch Site"]==entered_site]
-        fig = dcc.Graph(px.pie(filtered_df, values='Flight Number', names = 'class', title='Success of Launches'))
+        fig = px.pie(filtered_df, values='Flight Number', names = 'class', title='Success of Launches')
     return fig
 
 # TASK 4:
 # Add a callback function for `site-dropdown` and `payload-slider` as inputs, `success-payload-scatter-chart` as output
-@app_callback(
+@app.callback(
     Output(component_id='success-payload-scatter-chart', component_property='figure'),
-    [input(component_id='site-dropdown', component_property='value'),
-    input(component_id='payload-slider', component_property="value")]
+    [Input(component_id='site-dropdown', component_property='value'),
+    Input(component_id='payload-slider', component_property="value")]
 )
 def launch_site_payload(entered_site, payload_range):
-    if entered_site == 'ALL':
+    if entered_site == 'All sites':
         filtered_df = spacex_df[(spacex_df['Payload Mass (kg)']>= min(payload_range)) & (spacex_df['Payload Mass (kg)']<= max(payload_range))]   
     else:
         filtered_df = spacex_df[spacex_df['Launch Site']== entered_site]
